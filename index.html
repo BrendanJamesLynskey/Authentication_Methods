@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Authentication Methods — Passwords, MFA, Passkeys &amp; WebAuthn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/black.min.css">
+<style>
+  :root { --amber:#f5a623; --green:#4ecb8d; --purple:#a78bfa; --blue:#60a5fa; --red:#f87171;
+          --bg:#0a0a0f; --bg2:#10101a; --bg3:#181824; --border:#2a2a3a; --text:#e8e8f0; --muted:#8888a8; }
+  .reveal-viewport { background: var(--bg); }
+  .reveal .slides section { background: transparent; }
+  .reveal { font-family: 'DM Sans', sans-serif; color: var(--text); }
+  .reveal h1, .reveal h2, .reveal h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
+  .reveal h1 { font-size: 1.6em; color: var(--amber); line-height: 1.1; }
+  .reveal h2 { font-size: 1.1em; color: var(--amber); margin-bottom: .2em; }
+  .reveal h3 { font-size: .78em; color: var(--green); margin-bottom: .15em; }
+  .reveal p  { font-size: .56em; line-height: 1.45; color: var(--text); }
+  .reveal li { font-size: .54em; line-height: 1.45; margin-bottom: .1em; }
+  .reveal code { font-family: 'JetBrains Mono', monospace; font-size: .72em; }
+  .reveal pre  { box-shadow: none; background: var(--bg3); border: 1px solid var(--border);
+                 border-radius: 6px; padding: .3em .5em; margin: .25em 0; }
+  .reveal pre code { font-size: .52em; line-height: 1.35; background: transparent; color: #cdd6f4; }
+  .slide-hdr { display:flex; align-items:center; gap:.4em; border-bottom:1px solid var(--border);
+               padding-bottom:.2em; margin-bottom:.3em; }
+  .slide-hdr .tag { font-family:'JetBrains Mono',monospace; font-size:.42em; font-weight:500;
+                    color:var(--bg); background:var(--amber); padding:.1em .4em; border-radius:3px;
+                    letter-spacing:.04em; }
+  .slide-hdr h2 { margin:0; font-size:.95em; }
+  .cols { display:grid; gap:.5em; }
+  .cols-2 { grid-template-columns:1fr 1fr; }
+  .cols-3 { grid-template-columns:1fr 1fr 1fr; }
+  .cols-6040 { grid-template-columns:6fr 4fr; }
+  .cols-4060 { grid-template-columns:4fr 6fr; }
+  .card { background:var(--bg2); border:1px solid var(--border); border-radius:6px; padding:.35em .6em; }
+  .card.amber { border-left:3px solid var(--amber); }
+  .card.green { border-left:3px solid var(--green); }
+  .card.purple{ border-left:3px solid var(--purple); }
+  .card.blue  { border-left:3px solid var(--blue); }
+  .card.red   { border-left:3px solid var(--red); }
+  .card h3 { font-size:.64em; margin:0 0 .12em; }
+  .card p  { font-size:.52em; margin:0; color:#b8b8d0; }
+  .card ul { margin:0; padding-left:1em; }
+  .card li { font-size:.52em; color:#b8b8d0; margin-bottom:.02em; }
+  .reveal table { width:100%; border-collapse:collapse; font-size:.5em; }
+  .reveal table th { background:var(--bg3); color:var(--amber); font-weight:600;
+                     padding:.2em .4em; border:1px solid var(--border); text-align:left; }
+  .reveal table td { padding:.18em .4em; border:1px solid var(--border); color:#ccc; }
+  .reveal table tr:nth-child(even) td { background:#0e0e18; }
+  .a{color:var(--amber);font-weight:600;} .g{color:var(--green);font-weight:600;}
+  .p{color:var(--purple);font-weight:600;} .b{color:var(--blue);font-weight:600;}
+  .r{color:var(--red);font-weight:600;} .mono{font-family:'JetBrains Mono',monospace;}
+  svg.diagram { display:block; margin:0 auto; overflow:visible; }
+  .pill { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:.44em;
+          padding:.08em .4em; border-radius:99px; border:1px solid; margin:0 .08em; }
+  .pill.amber{color:var(--amber); border-color:var(--amber);}
+  .pill.green{color:var(--green); border-color:var(--green);}
+  .pill.purple{color:var(--purple); border-color:var(--purple);}
+  .pill.blue{color:var(--blue); border-color:var(--blue);}
+  .reveal .slide-footer{display:none;}
+  .title-slide h1{font-size:1.8em;}
+  .title-slide .subtitle{font-size:.7em; color:var(--green); font-family:'DM Sans',sans-serif;
+                         font-weight:300; letter-spacing:.04em; margin:.3em 0 .6em;}
+  .title-slide .meta{font-size:.48em; color:var(--muted); font-family:'JetBrains Mono',monospace;}
+  .ss-row{display:flex; gap:.25em; align-items:center; margin:.1em 0; font-size:.55em; font-family:'JetBrains Mono',monospace;}
+  .ss-node{padding:.2em .55em; border-radius:5px; font-size:.9em; background:var(--bg3); border:1px solid var(--border); color:var(--text);}
+  .ss-node.active{background:#1a2a1a; border-color:var(--green); color:var(--green);}
+  .ss-node.done{background:#1a1a2a; border-color:var(--purple); color:var(--purple);}
+  .ss-arrow{color:var(--amber);}
+  .reveal ul, .reveal ol { margin:.15em 0 .15em 1em; }
+  .reveal .slides > section { display:flex !important; flex-direction:column !important; overflow-y:auto !important; align-items:stretch !important; justify-content:flex-start !important; }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+
+<!-- ═══ SLIDE 01 — TITLE ═══ -->
+<section class="title-slide" data-background-color="#0a0a0f">
+  <div style="text-align:left; max-width:820px; margin:0 auto; padding:1em 0;">
+    <div style="font-family:'JetBrains Mono',monospace; font-size:.5em; color:var(--muted); margin-bottom:.4em; letter-spacing:.1em;">
+      TECHNICAL PRESENTATION
+    </div>
+    <h1>Authentication<br>Methods</h1>
+    <div class="subtitle">Passwords &middot; MFA &middot; Passkeys &amp; WebAuthn</div>
+    <div style="width:60px; height:3px; background:var(--amber); margin-bottom:1.4em;"></div>
+    <div style="display:flex; gap:1.2em; flex-wrap:wrap; margin-bottom:1em;">
+      <span class="pill amber">Argon2id</span>
+      <span class="pill green">TOTP</span>
+      <span class="pill purple">FIDO2</span>
+      <span class="pill blue">Passkeys</span>
+    </div>
+    <div class="ss-row" style="margin-top:0.6em;">
+      <span class="ss-node active">know</span>
+      <span class="ss-arrow">+</span>
+      <span class="ss-node active">have</span>
+      <span class="ss-arrow">+</span>
+      <span class="ss-node active">are</span>
+      <span class="ss-arrow">→</span>
+      <span class="ss-node done">phishing-resistant</span>
+    </div>
+    <p style="max-width:660px; color:#a0a0c0; font-size:.56em; line-height:1.5; margin-top:1em;">
+      Establishing <em>who the user is</em>, before any authorisation happens. The complement to the OAuth/OIDC series.
+    </p>
+    <div class="meta" style="margin-top:1.4em;">
+      Hash &nbsp;·&nbsp; Verify &nbsp;·&nbsp; Strengthen &nbsp;·&nbsp; Replace
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 02 — TOPICS ═══ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr"><span class="tag">01</span><h2>Topics</h2></div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Passwords (and how to stop using them)</h3>
+        <ul>
+          <li>Hashing — bcrypt, Argon2id, scrypt, PBKDF2</li>
+          <li>Password policies that actually help</li>
+          <li>Breach-detection (HIBP) and credential stuffing</li>
+          <li>Account-lockout, rate-limiting, abuse signals</li>
+        </ul>
+      </div>
+      <div class="card green" style="margin-top:0.5em;">
+        <h3 class="g">Multi-factor authentication</h3>
+        <ul>
+          <li>The three factor classes — what each is good for</li>
+          <li>TOTP (RFC 6238) and HOTP (RFC 4226) in detail</li>
+          <li>SMS / email codes — and why they're the weakest</li>
+          <li>Push, hardware OTP, smart cards</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3 class="p">Phishing-resistant — WebAuthn / FIDO2 / Passkeys</h3>
+        <ul>
+          <li>The three names for the same thing</li>
+          <li>Authenticator types — platform vs roaming</li>
+          <li>Discoverable credentials &amp; conditional UI</li>
+          <li>Synced passkeys vs device-bound</li>
+          <li>Attestation, AAGUIDs, FIDO MDS</li>
+        </ul>
+      </div>
+      <div class="card blue" style="margin-top:0.5em;">
+        <h3 class="b">Operational</h3>
+        <ul>
+          <li>Account recovery — the unsolved problem</li>
+          <li>Risk-based / adaptive auth</li>
+          <li>Step-up &amp; CAEP shared signals</li>
+          <li>Anti-bot &amp; abuse detection</li>
+          <li>Choosing a stack</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 03 — AUTHN VS AUTHZ ═══ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr"><span class="tag">02</span><h2>Authentication vs Authorisation — Where This Deck Sits</h2></div>
+  <p>The OAuth/OIDC decks in this series cover <span class="a">authorisation</span> ("what may an app do on a user's behalf?") and <span class="a">identity assertions</span> ("a JWT saying this is Alice"). Neither tells you <em>how</em> the user proved they were Alice in the first place. <span class="g">That is this deck.</span></p>
+
+  <svg class="diagram" viewBox="0 0 940 240" width="900" height="240">
+    <rect x="20"  y="80" width="180" height="80" rx="8" fill="#1a1a2a" stroke="#60a5fa" stroke-width="1.5"/>
+    <text x="110" y="115" text-anchor="middle" fill="#60a5fa" font-family="Playfair Display,serif" font-size="14" font-weight="700">User</text>
+    <text x="110" y="135" text-anchor="middle" fill="#ccc" font-family="JetBrains Mono,monospace" font-size="10">"is this really Alice?"</text>
+
+    <rect x="280" y="80" width="220" height="80" rx="8" fill="#1a1a2a" stroke="#f5a623" stroke-width="1.5"/>
+    <text x="390" y="105" text-anchor="middle" fill="#f5a623" font-family="Playfair Display,serif" font-size="14" font-weight="700">Authentication</text>
+    <text x="390" y="125" text-anchor="middle" fill="#ccc" font-family="JetBrains Mono,monospace" font-size="9">passwords · MFA · passkeys</text>
+    <text x="390" y="142" text-anchor="middle" fill="#ccc" font-family="JetBrains Mono,monospace" font-size="9">→ THIS DECK</text>
+
+    <rect x="540" y="80" width="200" height="80" rx="8" fill="#1a1a2a" stroke="#a78bfa" stroke-width="1.5"/>
+    <text x="640" y="105" text-anchor="middle" fill="#a78bfa" font-family="Playfair Display,serif" font-size="14" font-weight="700">Identity Tokens</text>
+    <text x="640" y="125" text-anchor="middle" fill="#ccc" font-family="JetBrains Mono,monospace" font-size="9">OIDC ID tokens, SAML</text>
+    <text x="640" y="142" text-anchor="middle" fill="#ccc" font-family="JetBrains Mono,monospace" font-size="9">→ OIDC / SAML decks</text>
+
+    <rect x="780" y="80" width="140" height="80" rx="8" fill="#1a1a2a" stroke="#4ecb8d" stroke-width="1.5"/>
+    <text x="850" y="115" text-anchor="middle" fill="#4ecb8d" font-family="Playfair Display,serif" font-size="14" font-weight="700">Authorisation</text>
+    <text x="850" y="135" text-anchor="middle" fill="#ccc" font-family="JetBrains Mono,monospace" font-size="9">OAuth · RBAC · ABAC</text>
+
+    <line x1="200" y1="120" x2="280" y2="120" stroke="#888"/>
+    <line x1="500" y1="120" x2="540" y2="120" stroke="#888"/>
+    <line x1="740" y1="120" x2="780" y2="120" stroke="#888"/>
+
+    <text x="465" y="200" text-anchor="middle" fill="#888" font-family="DM Sans,sans-serif" font-size="11">"Sign in with Google" packages all three; in your own systems they are separate concerns with separate failure modes.</text>
+  </svg>
+
+  <div class="card amber" style="margin-top:0.4em;">
+    <h3 class="a">A working definition</h3>
+    <p>Authentication is the <em>process</em> of getting a high-confidence answer to <em>"is the entity at the other end of this connection the human (or service) we expect?"</em>. The output of authentication is what feeds the AS in OAuth and the OP in OIDC.</p>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 04 — PASSWORD HASHING ═══ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr"><span class="tag">03</span><h2>Password Hashing — The Only Acceptable Way to Store Passwords</h2></div>
+  <p>If you ever store a password in plaintext, reverse-encrypted, or with a fast hash (MD5, SHA-256), you have lost. Use a <span class="a">memory-hard</span> password-hashing function with a per-user salt and tuned cost.</p>
+
+  <table>
+    <thead><tr><th>Function</th><th>Year</th><th>Type</th><th>Status in 2026</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td><span class="r">MD5 / SHA-1 / SHA-256 (raw)</span></td><td>1992+</td><td>Fast hash</td><td><span class="r">Forbidden</span></td><td>Crackable at billions/sec on a single GPU.</td></tr>
+      <tr><td><span class="r">PBKDF2-HMAC-SHA256</span></td><td>2000</td><td>Iterated hash</td><td>Acceptable for FIPS-only</td><td>CPU-only, GPU-friendly. Use ≥ 600 000 iterations (OWASP 2023).</td></tr>
+      <tr><td><span class="a">bcrypt</span></td><td>1999</td><td>Adaptive</td><td>Acceptable</td><td>Memory-light (4 KB) — modern GPUs / FPGAs eat it. Use cost ≥ 12.</td></tr>
+      <tr><td><span class="a">scrypt</span></td><td>2009</td><td>Memory-hard</td><td>Acceptable</td><td>Memory ≥ 64 MB, parallelism 1 — niche.</td></tr>
+      <tr><td><span class="g">Argon2id</span></td><td>2015</td><td>Memory-hard</td><td><span class="g">Recommended</span> (PHC winner, RFC 9106)</td><td>Tunable memory + parallelism + time. OWASP default: m=46 MiB, t=1, p=1.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="cols cols-2" style="margin-top:0.4em;">
+    <div>
+      <div class="card amber">
+        <h3 class="a">A storage record (Argon2id)</h3>
+<pre><code>$argon2id$v=19$m=47104,t=1,p=1$
+   c2FsdHNhbHRzYWx0c2FsdA$
+   QthRKhMKM7wG2pfjzvVXsBcEfBLk8qUZcM…
+
+      ↑ algorithm + version
+                 ↑ memory KiB · time · parallelism
+                          ↑ random salt (≥ 16 bytes, per-user)
+                                   ↑ derived key</code></pre>
+      </div>
+      <div class="card green" style="margin-top:0.4em;">
+        <h3 class="g">Tuning rule of thumb</h3>
+        <p>Pick parameters so a single hash takes <span class="a">~250–500 ms</span> on production hardware. Update parameters as hardware improves; rehash on next successful login.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3 class="p">Always pepper if you can</h3>
+        <ul>
+          <li>A <em>pepper</em> is a server-side secret (in HSM / KMS / Vault) HMAC'd onto the password before hashing.</li>
+          <li>Stolen DB → attacker still needs the pepper to make any progress.</li>
+          <li>Trade-off: rotation is harder (need to rehash on login).</li>
+        </ul>
+      </div>
+      <div class="card red" style="margin-top:0.4em;">
+        <h3 class="r">Common mistakes</h3>
+        <ul>
+          <li>Using <code>password.equals(stored)</code> — timing leak. Use <code>constant_time_eq</code>.</li>
+          <li>Truncating passwords to fit a column. Allow ≥ 64 chars.</li>
+          <li>Storing the hash <em>and</em> a "challenge" copy for SSO — defeats the hash.</li>
+          <li>Salting per-app instead of per-user.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 05 — PASSWORD POLICY ═══ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr"><span class="tag">04</span><h2>Password Policy — What Actually Helps</h2></div>
+  <p>Decades of "must contain a number, a symbol and the chief executive's mother's maiden name" gave us "<code>Password1!</code>". <span class="a">NIST SP 800-63B</span> (current) and <span class="a">BS 8484</span> agree on a much shorter list.</p>
+
+  <div class="cols cols-2" style="margin-top:0.4em;">
+    <div>
+      <div class="card green">
+        <h3 class="g">Do</h3>
+        <ul>
+          <li>Minimum length <span class="a">8</span> for low-risk; <span class="a">12+</span> for normal accounts; <span class="a">15+</span> for admin.</li>
+          <li>Allow length up to at least <span class="a">64</span> characters; allow all printable Unicode + spaces.</li>
+          <li>Block known-breached passwords (HIBP Pwned Passwords API) — k-anonymity prefix lookup, not raw upload.</li>
+          <li>Block trivial dictionary words and the username itself.</li>
+          <li>Show the user a strength meter (<code>zxcvbn</code>) tied to the same logic the server uses.</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card red">
+        <h3 class="r">Don't</h3>
+        <ul>
+          <li>Force <em>scheduled</em> rotation. Rotate on suspicion of compromise; otherwise leave alone.</li>
+          <li>Force composition rules (1 upper / 1 number / 1 symbol). They reduce entropy in practice.</li>
+          <li>Block paste — that's how password managers work.</li>
+          <li>Truncate or strip "special" characters silently.</li>
+          <li>Send the password back via email "for confirmation".</li>
+        </ul>
+      </div>
+      <div class="card amber" style="margin-top:0.4em;">
+        <h3 class="a">HIBP integration in five lines</h3>
+<pre><code>const sha = sha1(password).toUpperCase();
+const prefix = sha.slice(0, 5);
+const suffix = sha.slice(5);
+const list = await fetch(
+  `https://api.pwnedpasswords.com/range/${prefix}`).then(r=&gt;r.text());
+if (list.split('\n').some(l =&gt; l.startsWith(suffix))) reject();</code></pre>
+        <p>Server only ever sees the first 5 chars of a SHA-1 hash; the API returns ~500 candidates; you check locally.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 06 — RATE LIMITING ═══ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr"><span class="tag">05</span><h2>Rate-Limiting, Lockout &amp; Credential Stuffing</h2></div>
+  <p>The single most consequential authentication API is <code>/login</code>. Every credential-stuffing campaign first finds it.</p>
+
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Three signals to rate-limit on</h3>
+        <ul>
+          <li><span class="g">Per-account</span> — exponential back-off after N failures for the same username. Protects each user.</li>
+          <li><span class="g">Per-IP</span> — caps brute-force from a single client. Easily defeated by botnets but raises cost.</li>
+          <li><span class="g">Per-network / ASN</span> — catches botnets concentrated on a hosting provider.</li>
+        </ul>
+      </div>
+      <div class="card green" style="margin-top:0.4em;">
+        <h3 class="g">Lockout — the trade-off</h3>
+        <ul>
+          <li><span class="a">Soft lockout</span> — auto-unlock after N minutes. Default for consumer apps.</li>
+          <li><span class="a">Hard lockout</span> — admin re-enable. For high-value accounts; doubles as a self-serve DoS surface.</li>
+          <li>Always notify the user <em>after</em> the fact, never block silently.</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3 class="p">Credential stuffing — what it actually looks like</h3>
+        <ul>
+          <li>Attacker has a list of <em>(email, password)</em> pairs from another site's breach.</li>
+          <li>They try each one against your <code>/login</code> at low rate per IP, high diversity of IPs.</li>
+          <li>Per-IP limits don't catch it. Per-account limits do — but only if you're prepared for users to be locked out by accident.</li>
+          <li>Best defence: HIBP-block known-breached passwords <em>at signup and at login</em>, plus risk-based MFA challenges on suspicious sessions.</li>
+        </ul>
+      </div>
+      <div class="card red" style="margin-top:0.4em;">
+        <h3 class="r">Username enumeration</h3>
+        <ul>
+          <li>"Wrong password" vs "user not found" lets an attacker discover valid emails. Always return the same string and the same response time.</li>
+          <li>Same on signup ("email already registered") — use a generic "we've sent you a link" instead.</li>
+          <li>Same on password-reset.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 07 — MFA FACTORS ═══ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr"><span class="tag">06</span><h2>The Three Factor Classes</h2></div>
+
+  <div class="cols cols-3">
+    <div class="card amber">
+      <h3 class="a">Something you <em>know</em></h3>
+      <ul>
+        <li>Password / passphrase</li>
+        <li>PIN</li>
+        <li>"Security questions"</li>
+      </ul>
+      <p style="margin-top:.3em;">Cheap, universal, <em>phishable</em>. The factor everyone has and the factor every attacker is best at extracting.</p>
+    </div>
+    <div class="card green">
+      <h3 class="g">Something you <em>have</em></h3>
+      <ul>
+        <li>Phone (TOTP app, push, SMS)</li>
+        <li>Hardware token (YubiKey, Titan, Feitian)</li>
+        <li>Smart card / PIV</li>
+        <li>Recovery codes printed on paper</li>
+      </ul>
+      <p style="margin-top:.3em;">Adds a physical constraint — attacker must possess the device. Susceptible to SIM-swap (SMS) and theft.</p>
+    </div>
+    <div class="card purple">
+      <h3 class="p">Something you <em>are</em></h3>
+      <ul>
+        <li>Fingerprint, face, voice</li>
+        <li>Behavioural biometrics (typing rhythm)</li>
+      </ul>
+      <p style="margin-top:.3em;">Convenient, <em>not</em> a primary remote factor — biometric data leaks and you can't rotate your face. Used as a <em>local</em> unlock for a stronger factor.</p>
+    </div>
+  </div>
+
+  <div class="card amber" style="margin-top:0.4em;">
+    <h3 class="a">"MFA" really means "two factors from <em>different</em> classes"</h3>
+    <p>Password + security questions = one factor (both "know"). Password + TOTP = two factors. Password + face-unlock-of-passkey = two factors (the face unlocks the <em>have</em>). The class boundary, not the count, is what matters.</p>
+  </div>
+
+  <div class="card red" style="margin-top:0.3em;">
+    <h3 class="r">NIST AAL ladder (SP 800-63B)</h3>
+    <ul>
+      <li><span class="a">AAL1</span> — single factor. Passwords alone live here.</li>
+      <li><span class="a">AAL2</span> — two factors, one cryptographic. TOTP / push / hardware token + password.</li>
+      <li><span class="a">AAL3</span> — hardware-bound cryptographic authenticator + verifier impersonation resistance. <span class="g">FIDO2 / PIV.</span></li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 08 — TOTP ═══ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr"><span class="tag">07</span><h2>TOTP &amp; HOTP — How "Authenticator App" Codes Work</h2></div>
+  <p><span class="a">HOTP</span> (RFC 4226, 2005): HMAC-based one-time password from a counter. <span class="a">TOTP</span> (RFC 6238, 2011): use the current Unix time / 30 s window as the counter. Both standards are open; the server and the app share a per-user secret only.</p>
+
+  <div class="cols cols-2" style="margin-top:0.4em;">
+    <div>
+      <div class="card amber">
+        <h3 class="a">The whole algorithm</h3>
+<pre><code>function totp(secret, t = floor(time()/30)) {
+  let h = hmac_sha1(secret, int_to_8bytes(t));
+  let off = h[19] &amp; 0x0f;
+  let bin = ((h[off]&amp;0x7f)&lt;&lt;24)|(h[off+1]&lt;&lt;16)
+          |(h[off+2]&lt;&lt;8)|h[off+3];
+  return (bin % 1_000_000).toString().padStart(6,'0');
+}</code></pre>
+        <p style="margin-top:.3em;">Server checks the <em>current</em> + <em>previous</em> + <em>next</em> windows to allow ~30 s of clock skew.</p>
+      </div>
+      <div class="card green" style="margin-top:0.4em;">
+        <h3 class="g">The "QR code" enrolment</h3>
+<pre><code>otpauth://totp/Acme:alice@example.com?
+  secret=JBSWY3DPEHPK3PXP&amp;
+  issuer=Acme&amp;
+  algorithm=SHA1&amp;digits=6&amp;period=30</code></pre>
+        <p>Display this URI as a QR; the user's app (Authy, Google Authenticator, 1Password, Bitwarden, Aegis) decodes it.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3 class="p">Implementation notes</h3>
+        <ul>
+          <li>Secret length: 160 bits (20 bytes), random.</li>
+          <li>Store the secret encrypted at rest; treat as more sensitive than the password hash.</li>
+          <li>Burn the just-used code (replay protection inside the 30 s window).</li>
+          <li>Generate <em>recovery codes</em> at enrolment and store hashed (10 codes, single-use).</li>
+        </ul>
+      </div>
+      <div class="card red" style="margin-top:0.4em;">
+        <h3 class="r">Why TOTP is no longer enough on its own</h3>
+        <ul>
+          <li><span class="r">Phishable</span> — a fake login site asks for the code, which the attacker forwards to the real one in 30 s.</li>
+          <li>Modern phishing kits (EvilProxy, Tycoon) automate exactly this.</li>
+          <li>Useful as a step <em>up</em> from password-only, but the future is phishing-resistant (FIDO2/passkeys).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 09 — SMS / EMAIL ═══ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr"><span class="tag">08</span><h2>SMS, Email &amp; Push — The Weakest "Strong" Factors</h2></div>
+
+  <div class="cols cols-3">
+    <div class="card red">
+      <h3 class="r">SMS one-time codes</h3>
+      <ul>
+        <li><span class="r">SIM-swap</span> attacks shift the user's number to the attacker's SIM.</li>
+        <li>SS7 / SMS gateway interception is well-documented.</li>
+        <li>Phishable identically to TOTP.</li>
+        <li>NIST 800-63B-3 deprecated SMS as a factor in 2017; many regulators followed.</li>
+      </ul>
+      <p style="margin-top:.3em;">Still the most-deployed second factor in the world because every phone has SMS. Use only if you literally cannot ship anything else.</p>
+    </div>
+    <div class="card amber">
+      <h3 class="a">Email magic links</h3>
+      <ul>
+        <li>Equivalent strength to "control of the inbox" — usually one password away.</li>
+        <li>Susceptible to email-account takeover, link harvesting in shared inboxes.</li>
+        <li>Convenient for low-risk consumer flows ("sign in to read my newsletter").</li>
+      </ul>
+      <p style="margin-top:.3em;">Acceptable as a <em>passwordless</em> first factor for low-stakes apps; not as MFA for anything serious.</p>
+    </div>
+    <div class="card green">
+      <h3 class="g">Push notifications (Microsoft/Duo style)</h3>
+      <ul>
+        <li>App on the user's phone receives a "did you just try to log in?" prompt.</li>
+        <li>Better UX than typing a code; bound to the registered device.</li>
+        <li>Vulnerable to <span class="r">MFA fatigue</span> — bombard the user until they hit Approve.</li>
+        <li>Mitigation: <span class="g">number matching</span> — show a 2-digit code on the login page; user must type it into the push.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card blue" style="margin-top:0.4em;">
+    <h3 class="b">A reasonable 2026 ladder</h3>
+    <ol style="padding-left:1.2em;">
+      <li><span class="g">Passkey / FIDO2 hardware key</span> — phishing-resistant, the gold standard.</li>
+      <li><span class="a">TOTP / push-with-number-matching</span> — when the user can't or won't enrol a passkey.</li>
+      <li><span class="r">SMS</span> — last resort, for users with neither smartphone nor security key.</li>
+    </ol>
+    <p style="margin-top:.25em;">Always offer two methods, so loss of one doesn't lock the user out (recovery codes count).</p>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 10 — WEBAUTHN INTRO ═══ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr"><span class="tag">09</span><h2>WebAuthn / FIDO2 / Passkeys — Three Names, One Thing</h2></div>
+
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">The vocabulary, untangled</h3>
+        <ul>
+          <li><span class="g">FIDO2</span> = the umbrella spec from the FIDO Alliance (since 2018).</li>
+          <li><span class="g">WebAuthn</span> = the W3C browser API half of FIDO2 — what your JS calls.</li>
+          <li><span class="g">CTAP2</span> = the FIDO Alliance protocol between the browser and the authenticator (USB / NFC / BLE).</li>
+          <li><span class="g">Passkey</span> = a marketing term (Apple/Google/Microsoft, 2022) for a FIDO2 credential that's <em>discoverable</em> and (usually) <em>synced</em> across the user's devices.</li>
+        </ul>
+      </div>
+      <div class="card green" style="margin-top:0.4em;">
+        <h3 class="g">Why it matters</h3>
+        <ul>
+          <li><span class="a">Phishing-resistant by design</span> — the authenticator only signs for the actual origin it was registered for, period.</li>
+          <li>No shared secret to steal from your DB; you store only the user's <em>public</em> key.</li>
+          <li>No code to type, no SMS to intercept.</li>
+          <li>Cross-platform: same API on every modern browser.</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3 class="p">How the cryptography binds to the origin</h3>
+<pre><code># registration (one-off)
+public_key, credential_id = authenticator.create({
+  rp: { id: "acme.com", name: "Acme" },
+  user: { id, name, displayName },
+  challenge: random_bytes(32),
+  pubKeyCredParams: [{type:"public-key", alg:-7}]
+})
+# server stores (user_id → public_key, credential_id, sign_count)
+
+# login
+signed = authenticator.get({
+  rpId: "acme.com",
+  challenge: random_bytes(32),
+  allowCredentials: [{ id: credential_id }]
+})
+# server verifies: signature, origin = "https://acme.com",
+#                  rpIdHash matches, sign_count increased</code></pre>
+      </div>
+      <div class="card blue" style="margin-top:0.4em;">
+        <h3 class="b">The phishing-resistance proof</h3>
+        <p>The <code>clientDataJSON</code> the authenticator signs over includes the <em>actual origin</em> of the page making the request. A phish at <code>acme.evil.com</code> can never produce a signature the real <code>acme.com</code> server would accept — because the authenticator only ever signs for what it sees in the address bar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 11 — AUTHENTICATOR TYPES ═══ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr"><span class="tag">10</span><h2>Authenticator Types — Platform vs Roaming, Synced vs Bound</h2></div>
+
+  <table>
+    <thead><tr><th>&nbsp;</th><th>Platform</th><th>Roaming</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="a">What it is</span></td>
+        <td>Built into the device (Touch ID, Face ID, Windows Hello)</td>
+        <td>Plugged in / tapped (YubiKey, Titan, Feitian)</td>
+      </tr>
+      <tr>
+        <td><span class="a">Transport</span></td>
+        <td>Internal — Secure Enclave, TPM, StrongBox</td>
+        <td>USB-A/C, NFC, BLE</td>
+      </tr>
+      <tr>
+        <td><span class="a">User experience</span></td>
+        <td>Touch the sensor / look at the camera</td>
+        <td>Tap the key, enter PIN if set</td>
+      </tr>
+      <tr>
+        <td><span class="a">Where the key lives</span></td>
+        <td>On <em>this</em> device only (or synced — see below)</td>
+        <td>On the physical token, never leaves it</td>
+      </tr>
+      <tr>
+        <td><span class="a">Best for</span></td>
+        <td>Everyday consumer login, low-friction MFA</td>
+        <td>High-assurance, shared devices, hardware-attested compliance</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="cols cols-2" style="margin-top:0.4em;">
+    <div>
+      <div class="card green">
+        <h3 class="g">Synced passkeys</h3>
+        <ul>
+          <li>Apple iCloud Keychain, Google Password Manager, 1Password, Bitwarden, Microsoft (Edge / Authenticator).</li>
+          <li>Private key replicated, end-to-end encrypted with the user's account password / device PIN, across all the user's devices.</li>
+          <li>Lose your phone? Sign in on a new one with your iCloud / Google account, your passkeys are there.</li>
+          <li>The <em>default</em> passkey type for consumer apps in 2026.</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card amber">
+        <h3 class="g">Device-bound credentials</h3>
+        <ul>
+          <li>Stay on a single device; cannot be exported.</li>
+          <li>Hardware tokens are always device-bound. Platform authenticators can be configured this way.</li>
+          <li>Required by some regulators (eIDAS High, FIDO L3 attestation, defence).</li>
+          <li>Operationally heavier: every device needs its own enrolment, and a lost device = a recovery flow.</li>
+        </ul>
+      </div>
+      <div class="card red" style="margin-top:0.4em;">
+        <h3 class="r">The synced-vs-bound debate</h3>
+        <p>Consumer security teams: "synced is fine, the real risk is account takeover, and synced passkeys still beat passwords by an order of magnitude". Regulated security teams: "if it can leave the device, it doesn't satisfy hardware-bound assurance". <em>Both are right for their threat models.</em></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 12 — DISCOVERABLE + CONDITIONAL UI ═══ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr"><span class="tag">11</span><h2>Discoverable Credentials &amp; Conditional UI</h2></div>
+  <p>The two features that make passkeys feel <em>better</em> than passwords, not just safer.</p>
+
+  <div class="cols cols-2" style="margin-top:0.4em;">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Discoverable credentials (a.k.a. resident keys)</h3>
+        <ul>
+          <li>Old (non-discoverable): server must hand the authenticator the <em>credential ID</em> first; the user must type a username.</li>
+          <li>New (discoverable): the credential carries the <em>username</em> with it, on the authenticator. The login page can ask "any passkey for this site?".</li>
+          <li>This is what enables <em>username-less</em> sign-in.</li>
+        </ul>
+      </div>
+      <div class="card green" style="margin-top:0.4em;">
+        <h3 class="g">Conditional UI (autofill)</h3>
+<pre><code>// in your login form
+&lt;input type="text" name="username"
+       autocomplete="username webauthn"&gt;
+
+// JS at page load
+navigator.credentials.get({
+  mediation: "conditional",
+  publicKey: { challenge, rpId, userVerification: "preferred" }
+});</code></pre>
+        <p style="margin-top:.25em;">Browser shows passkeys in the same dropdown as saved passwords. User taps one → done. The flow that finally beats password manager autofill.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3 class="p">A 2026-grade login UX</h3>
+        <ol style="padding-left:1.2em;">
+          <li>Page renders an empty username field with <code>autocomplete="username webauthn"</code>.</li>
+          <li>Conditional <code>navigator.credentials.get()</code> fires in the background.</li>
+          <li>If the user has a synced passkey for this site, it appears in the autofill bubble.</li>
+          <li>One tap (Touch ID / Face ID) and they're in. <em>No username, no password, no MFA prompt.</em></li>
+          <li>If no passkey: form falls back to password + (TOTP / push) flow.</li>
+        </ol>
+      </div>
+      <div class="card blue" style="margin-top:0.4em;">
+        <h3 class="b">Best practice</h3>
+        <p>Always present the passkey path <em>and</em> a fall-back. Don't force migration; nudge it: "We just signed you in with your password. Want to add a passkey for next time?" Conversion rates rise sharply when you ask in-context.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 13 — ATTESTATION / AAGUID ═══ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr"><span class="tag">12</span><h2>Attestation, AAGUIDs &amp; the FIDO Metadata Service</h2></div>
+  <p>For regulated deployments you need to know <em>what kind of authenticator</em> the user just enrolled — was it a YubiKey 5, a synced iCloud passkey, a software-only fake?</p>
+
+  <div class="cols cols-2" style="margin-top:0.4em;">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Attestation in one paragraph</h3>
+        <p>During registration the authenticator can include a signed <em>attestation statement</em> proving its make/model. Attached to it is the <span class="g">AAGUID</span> — a 128-bit identifier for the authenticator model.</p>
+<pre><code>{
+  "fmt": "packed",
+  "attStmt": { "alg": -7, "sig": "…",
+               "x5c": [ "MIIEx…device-cert" ] },
+  "authData": { "aaguid": "ee882879-…",
+                "credentialPublicKey": … }
+}</code></pre>
+      </div>
+      <div class="card green" style="margin-top:0.4em;">
+        <h3 class="g">The FIDO Metadata Service (MDS)</h3>
+        <ul>
+          <li>FIDO Alliance publishes a signed JSON list of every certified authenticator AAGUID with its capabilities, certifications and revocation status.</li>
+          <li>Your RP fetches MDS regularly, indexed by AAGUID.</li>
+          <li>Lets you say <em>"only accept FIDO L2 hardware authenticators for admin enrolment"</em>.</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3 class="p">Attestation conveyance</h3>
+        <table>
+          <thead><tr><th><code>attestation</code></th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>none</code></td><td>RP doesn't want it; default for consumer apps. Privacy-preserving.</td></tr>
+            <tr><td><code>indirect</code></td><td>Browser may anonymise / batch-attest. Compromise.</td></tr>
+            <tr><td><code>direct</code></td><td>Real attestation; required for regulated / enterprise enrolment.</td></tr>
+            <tr><td><code>enterprise</code></td><td>Permits per-device serial-number attestation; only allowed for whitelisted RPs.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card red" style="margin-top:0.4em;">
+        <h3 class="r">Privacy trade-off</h3>
+        <p>Direct attestation can let the RP track <em>which physical YubiKey</em> the user used across services. Browsers may rewrite attestation to prevent this; consumer apps should just use <code>none</code>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 14 — RECOVERY ═══ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr"><span class="tag">13</span><h2>Account Recovery — The Unsolved Problem</h2></div>
+  <p>The strongest authenticator in the world is undone by the recovery flow. <em>Whatever path the legitimate user takes when they lose access is the same path an attacker takes when they don't have any.</em></p>
+
+  <div class="cols cols-2" style="margin-top:0.4em;">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Common recovery paths, ranked by safety</h3>
+        <ol style="padding-left:1.2em;">
+          <li><span class="g">A second registered authenticator</span> — second YubiKey, second device's passkey. Best.</li>
+          <li><span class="g">Single-use printed recovery codes</span>, generated at enrolment, stored offline.</li>
+          <li><span class="g">In-person verification</span> at a retail counter (banks). Slow, expensive, hard to phish.</li>
+          <li>Synced-credential recovery (iCloud / Google) — strong if the underlying account is locked down.</li>
+          <li>Email + previous-password challenge — moderate.</li>
+          <li>"Identity verification" (photo of passport, selfie) — phishable; depends on a vendor's KYC quality.</li>
+          <li><span class="r">Security questions</span> — please no.</li>
+        </ol>
+      </div>
+    </div>
+    <div>
+      <div class="card green">
+        <h3 class="g">Patterns that work in practice</h3>
+        <ul>
+          <li><span class="a">Encourage two passkeys</span> at enrolment ("set up a backup now?"). Most users won't, but the prompt halves recovery volume.</li>
+          <li><span class="a">Cool-down on recovery</span> — recovered accounts spend 24–72 h in a low-trust mode (no high-value actions, alerts to the original email).</li>
+          <li><span class="a">Notify aggressively</span> — recovery initiated, recovery completed, all to every channel you have on file.</li>
+          <li><span class="a">Make the recovery path obvious in the UI</span> — hidden recovery becomes social-engineering scope for support staff.</li>
+        </ul>
+      </div>
+      <div class="card red" style="margin-top:0.4em;">
+        <h3 class="r">If you do nothing else</h3>
+        <p>Decide upfront whether your security model is "we never recover an account, lost = lost" (e.g. crypto wallets) or "we always recover, with friction proportional to risk" (every consumer app). Trying to do both produces the worst of each.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 15 — RISK / ADAPTIVE / CAEP ═══ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr"><span class="tag">14</span><h2>Risk-Based / Adaptive Authentication &amp; CAEP</h2></div>
+
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Risk-based auth — the idea</h3>
+        <p>Don't ask the user for MFA on every login. Score each session for risk and step up only when the score warrants.</p>
+        <ul>
+          <li>New device / fingerprint?</li>
+          <li>New IP geolocation, ASN, or impossible-travel from the previous session?</li>
+          <li>Time of day vs the user's pattern?</li>
+          <li>Browser / OS user-agent shift?</li>
+          <li>Logins for many distinct accounts from the same IP (credential stuffing)?</li>
+          <li>HIBP-flagged password just attempted (yes, even if correct)?</li>
+        </ul>
+      </div>
+      <div class="card green" style="margin-top:0.4em;">
+        <h3 class="g">Step-up — what to ask for</h3>
+        <ul>
+          <li>Low risk: nothing.</li>
+          <li>Medium: extra factor for this session only.</li>
+          <li>High: re-auth + email confirmation; lock account on second failure.</li>
+        </ul>
+        <p style="margin-top:.25em;">If you're using OIDC, request the step-up via <code>acr_values</code> + <code>prompt=login</code>; verify the returned <code>acr</code> and <code>amr</code>.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card purple">
+        <h3 class="p">CAEP &amp; SSF — Continuous Access Evaluation</h3>
+        <ul>
+          <li><span class="a">SSF</span> = Shared Signals Framework (OpenID Foundation): a publish/subscribe channel for security events between IdPs and SPs.</li>
+          <li><span class="a">CAEP</span> = the profile of SSF for "this user just changed their password / had their session revoked / failed step-up".</li>
+          <li>Lets an SP react to a signal from another SP / IdP <em>during</em> a session, not only at login.</li>
+          <li>Already deployed by Google, Microsoft, Okta, Cisco; growing in 2025–2026.</li>
+        </ul>
+      </div>
+      <div class="card blue" style="margin-top:0.4em;">
+        <h3 class="b">Practical pattern</h3>
+        <p>Subscribe your high-value SaaS apps to the workforce IdP's CAEP stream. When the IdP sees a suspicious sign-in, fires <code>token-claims-change</code> or <code>session-revoked</code>; every downstream app drops the session within seconds, not hours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 16 — BOT / ABUSE ═══ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr"><span class="tag">15</span><h2>Anti-Bot &amp; Abuse Detection</h2></div>
+  <p>Authentication endpoints are also the primary surface for non-credential attacks: account creation abuse, scraping, low-and-slow stuffing.</p>
+
+  <div class="cols cols-2" style="margin-top:0.4em;">
+    <div>
+      <div class="card amber">
+        <h3 class="a">Tools that work</h3>
+        <ul>
+          <li><span class="g">Privacy-preserving CAPTCHAs</span> — Cloudflare Turnstile, hCaptcha, reCAPTCHA Enterprise. Invisible by default.</li>
+          <li><span class="g">Private Access Tokens</span> (Apple, Cloudflare, Fastly) — device attestation without per-site tracking.</li>
+          <li><span class="g">Rate-limit at the edge</span> (Cloudflare, Akamai, Fastly) — drop the obvious botnet traffic before it touches your origin.</li>
+          <li><span class="g">JS challenges</span> — cheap puzzles that headless browsers find expensive.</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card green">
+        <h3 class="g">Fingerprinting (with caution)</h3>
+        <ul>
+          <li>Device fingerprint (canvas, WebGL, fonts, audio context) is useful for risk scoring but ages quickly and conflicts with privacy regulation.</li>
+          <li>Browser-issued <em>device tokens</em> (FedCM, Private Access Tokens) are the privacy-preserving replacement.</li>
+        </ul>
+      </div>
+      <div class="card red" style="margin-top:0.4em;">
+        <h3 class="r">Don't</h3>
+        <ul>
+          <li>Use IP address as a primary identity signal — mobile carriers, CGNAT, and corporate VPNs make this unreliable.</li>
+          <li>Block a country / region without an audited business reason — you'll quietly lock out diaspora users.</li>
+          <li>Show a different page based on User-Agent — every scraper rotates UAs.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SLIDE 17 — CHOOSING A STACK ═══ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr"><span class="tag">16</span><h2>Choosing a Stack — Build vs Buy</h2></div>
+
+  <table>
+    <thead><tr><th>If you're...</th><th>Likely best</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>A startup, B2C, want a passkey-first UX in two weeks</td>
+        <td><span class="a">Stytch / Clerk / Auth0</span></td>
+        <td>Hosted passkey + magic-link + social out of the box; passkey UX they iterate on faster than you will.</td>
+      </tr>
+      <tr>
+        <td>A B2B SaaS that needs to sell to enterprise</td>
+        <td><span class="a">WorkOS</span> + your own login UI</td>
+        <td>Adds SSO/SCIM the moment your first big customer asks; passkeys for end users on top.</td>
+      </tr>
+      <tr>
+        <td>An enterprise with existing AD / Entra</td>
+        <td><span class="a">Microsoft Entra ID + Authenticator</span></td>
+        <td>Conditional access policies, Authenticator app, FIDO2 keys all in one tenant; integrates with everything.</td>
+      </tr>
+      <tr>
+        <td>Self-hosting, mature ops</td>
+        <td><span class="g">Keycloak</span> + WebAuthn extension, or <span class="g">ZITADEL</span></td>
+        <td>Full control; both ship modern WebAuthn / passkey support, conditional UI works, FAPI-conformant.</td>
+      </tr>
+      <tr>
+        <td>A government / eIDAS-regulated portal</td>
+        <td>National eID + national IdP</td>
+        <td>End users already have the credential (BankID, eID card, EUDI Wallet); reuse, don't reissue.</td>
+      </tr>
+      <tr>
+        <td>A tiny internal tool / homelab</td>
+        <td><span class="g">Authelia</span> or <span class="g">Authentik</span> + a hardware key</td>
+        <td>Light, OIDC-aware reverse-proxy auth; covers WebAuthn for everything behind the proxy.</td>
+      </tr>
+      <tr>
+        <td>A high-security workload, no off-the-shelf option</td>
+        <td>Build on libraries: <code>passport-fido2-webauthn</code> · <code>SimpleWebAuthn</code> · <code>fido2-net-lib</code> · <code>webauthn-rs</code></td>
+        <td>Each is well-maintained, conformant, and small. Don't write the protocol yourself.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+
+<!-- ═══ SLIDE 18 — SUMMARY ═══ -->
+<section data-background-color="#0a0a0f">
+  <div class="slide-hdr"><span class="tag">17</span><h2>Summary &amp; References</h2></div>
+  <div class="cols cols-2">
+    <div>
+      <div class="card amber">
+        <h3 class="a">What we covered</h3>
+        <ul>
+          <li>Where AuthN sits relative to OAuth/OIDC</li>
+          <li>Password hashing (Argon2id is the default), peppering, common mistakes</li>
+          <li>NIST 800-63B password policy — what to do, what to drop</li>
+          <li>Rate-limiting, lockout trade-offs, credential stuffing, username enumeration</li>
+          <li>The three factor classes and the AAL ladder</li>
+          <li>TOTP/HOTP in detail; SMS / email / push pros and cons</li>
+          <li>WebAuthn / FIDO2 / Passkeys — three names, one phishing-resistant primitive</li>
+          <li>Platform vs roaming; synced vs device-bound</li>
+          <li>Discoverable credentials + conditional UI = the 2026 login UX</li>
+          <li>Attestation, AAGUIDs, FIDO MDS</li>
+          <li>Account recovery — patterns that work</li>
+          <li>Risk-based auth, step-up, CAEP / SSF</li>
+          <li>Anti-bot &amp; abuse</li>
+          <li>Build vs buy</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card green">
+        <h3 class="g">Three take-aways</h3>
+        <ol style="padding-left:1.2em;">
+          <li><span class="a">Argon2id with per-user salt + server pepper</span> is the only acceptable password storage in 2026.</li>
+          <li><span class="a">All non-WebAuthn second factors are phishable.</span> They're a step up from password-only, but the destination is FIDO2 / passkeys.</li>
+          <li><span class="a">Recovery is the security model.</span> Whatever the legitimate-user-who-lost-everything path is, that is also the attacker path. Design it deliberately.</li>
+        </ol>
+      </div>
+      <div class="card blue" style="margin-top:0.4em;">
+        <h3 class="b">Companion decks</h3>
+        <p><span class="a">OAuth — A Gentle Primer</span> · <span class="a">Introduction to OAuth</span> · <span class="a">OAuth for MCP Servers</span> &middot; <span class="a">Introduction / Advanced OpenID Connect</span> &middot; <span class="a">SAML 2.0 &amp; SCIM</span> &middot; <span class="a">Authorization Models</span>.</p>
+      </div>
+      <div class="card purple" style="margin-top:0.4em;">
+        <h3 class="p">References</h3>
+        <p>NIST SP 800-63B-3 (Digital Identity Guidelines, Authenticator &amp; Lifecycle) &middot; OWASP ASVS v4 §2 (Authentication) &middot; OWASP Password Storage Cheat Sheet &middot; RFC 9106 (Argon2) &middot; RFC 4226 (HOTP) &middot; RFC 6238 (TOTP) &middot; W3C WebAuthn Level 3 &middot; FIDO Alliance — fidoalliance.org &middot; FIDO Metadata Service v3 &middot; haveibeenpwned.com / Pwned Passwords &middot; OpenID SSF / CAEP &middot; passkeys.dev</p>
+      </div>
+      <div class="card red" style="margin-top:0.4em;">
+        <h3 class="r">One-line takeaway</h3>
+        <p>Stop treating "MFA" as the goal. The goal is <em>phishing-resistant authentication</em>; passkeys are the realistic path there for the next decade.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/plugin/highlight/highlight.min.js"></script>
+<script>
+Reveal.initialize({
+  hash: true, slideNumber: 'c/t', transition: 'fade', transitionSpeed: 'fast',
+  controls: true, progress: true, center: false, width: 1100, height: 900, margin: 0.01,
+  plugins: [RevealHighlight], highlight: { theme: 'monokai' }
+});
+</script>
+<script>
+(function(){
+  var h = Reveal.getConfig().height || 900;
+  var m = Reveal.getConfig().margin || 0.02;
+  var maxH = Math.floor(h * (1 - 2 * m)) + 'px';
+  function fixSlides(){
+    document.querySelectorAll('.reveal .slides>section,.reveal .slides>section>section').forEach(function(s){
+      s.style.display = 'block'; s.style.maxHeight = maxH;
+    });
+  }
+  Reveal.on('ready', fixSlides);
+  Reveal.on('slidechanged', fixSlides);
+})();
+</script>
+</body>
+</html>
