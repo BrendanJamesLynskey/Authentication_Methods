@@ -10,8 +10,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/black.min.css">
 <style>
-  :root { --amber:#f5a623; --green:#4ecb8d; --purple:#a78bfa; --blue:#60a5fa; --red:#f87171;
-          --bg:#0a0a0f; --bg2:#10101a; --bg3:#181824; --border:#2a2a3a; --text:#e8e8f0; --muted:#8888a8; }
+  :root { --amber:#cfad64; --green:#8fc9a1; --purple:#b2a3d0; --blue:#93b6cd; --red:#da7d6b;
+          --bg:#0f231c; --bg2:#132a22; --bg3:#173028; --border:#29483d; --text:#ede8d8; --muted:#829b90; }
   .reveal-viewport { background: var(--bg); }
   .reveal .slides section { background: transparent; }
   .reveal { font-family: 'DM Sans', sans-serif; color: var(--text); }
@@ -24,7 +24,7 @@
   .reveal code { font-family: 'JetBrains Mono', monospace; font-size: .72em; }
   .reveal pre  { box-shadow: none; background: var(--bg3); border: 1px solid var(--border);
                  border-radius: 6px; padding: .3em .5em; margin: .25em 0; }
-  .reveal pre code { font-size: .52em; line-height: 1.35; background: transparent; color: #cdd6f4; }
+  .reveal pre code { font-size: .52em; line-height: 1.35; background: transparent; color: #d9dcce; }
   .slide-hdr { display:flex; align-items:center; gap:.4em; border-bottom:1px solid var(--border);
                padding-bottom:.2em; margin-bottom:.3em; }
   .slide-hdr .tag { font-family:'JetBrains Mono',monospace; font-size:.42em; font-weight:500;
@@ -43,14 +43,14 @@
   .card.blue  { border-left:3px solid var(--blue); }
   .card.red   { border-left:3px solid var(--red); }
   .card h3 { font-size:.64em; margin:0 0 .12em; }
-  .card p  { font-size:.52em; margin:0; color:#b8b8d0; }
+  .card p  { font-size:.52em; margin:0; color:#b9c8bc; }
   .card ul { margin:0; padding-left:1em; }
-  .card li { font-size:.52em; color:#b8b8d0; margin-bottom:.02em; }
+  .card li { font-size:.52em; color:#b9c8bc; margin-bottom:.02em; }
   .reveal table { width:100%; border-collapse:collapse; font-size:.5em; }
   .reveal table th { background:var(--bg3); color:var(--amber); font-weight:600;
                      padding:.2em .4em; border:1px solid var(--border); text-align:left; }
-  .reveal table td { padding:.18em .4em; border:1px solid var(--border); color:#ccc; }
-  .reveal table tr:nth-child(even) td { background:#0e0e18; }
+  .reveal table td { padding:.18em .4em; border:1px solid var(--border); color:#ccd5c7; }
+  .reveal table tr:nth-child(even) td { background:#122820; }
   .a{color:var(--amber);font-weight:600;} .g{color:var(--green);font-weight:600;}
   .p{color:var(--purple);font-weight:600;} .b{color:var(--blue);font-weight:600;}
   .r{color:var(--red);font-weight:600;} .mono{font-family:'JetBrains Mono',monospace;}
@@ -68,8 +68,8 @@
   .title-slide .meta{font-size:.48em; color:var(--muted); font-family:'JetBrains Mono',monospace;}
   .ss-row{display:flex; gap:.25em; align-items:center; margin:.1em 0; font-size:.55em; font-family:'JetBrains Mono',monospace;}
   .ss-node{padding:.2em .55em; border-radius:5px; font-size:.9em; background:var(--bg3); border:1px solid var(--border); color:var(--text);}
-  .ss-node.active{background:#1a2a1a; border-color:var(--green); color:var(--green);}
-  .ss-node.done{background:#1a1a2a; border-color:var(--purple); color:var(--purple);}
+  .ss-node.active{background:#2f3e35; border-color:var(--green); color:var(--green);}
+  .ss-node.done{background:#19342a; border-color:var(--purple); color:var(--purple);}
   .ss-arrow{color:var(--amber);}
   .reveal ul, .reveal ol { margin:.15em 0 .15em 1em; }
   .reveal .slides > section { display:flex !important; flex-direction:column !important; overflow-y:auto !important; align-items:stretch !important; justify-content:flex-start !important; }
@@ -81,7 +81,7 @@
 
 
 <!-- ═══ SLIDE 01 — TITLE ═══ -->
-<section class="title-slide" data-background-color="#0a0a0f">
+<section class="title-slide" data-background-color="#0f231c">
   <div style="text-align:left; max-width:820px; margin:0 auto; padding:1em 0;">
     <div style="font-family:'JetBrains Mono',monospace; font-size:.5em; color:var(--muted); margin-bottom:.4em; letter-spacing:.1em;">
       TECHNICAL PRESENTATION
@@ -104,7 +104,7 @@
       <span class="ss-arrow">→</span>
       <span class="ss-node done">phishing-resistant</span>
     </div>
-    <p style="max-width:660px; color:#a0a0c0; font-size:.56em; line-height:1.5; margin-top:1em;">
+    <p style="max-width:660px; color:#9fb3a8; font-size:.56em; line-height:1.5; margin-top:1em;">
       Establishing <em>who the user is</em>, before any authorisation happens. The complement to the OAuth/OIDC series.
     </p>
     <div class="meta" style="margin-top:1.4em;">
@@ -115,7 +115,7 @@
 
 
 <!-- ═══ SLIDE 02 — TOPICS ═══ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#0f231c">
   <div class="slide-hdr"><span class="tag">01</span><h2>Topics</h2></div>
   <div class="cols cols-2">
     <div>
@@ -165,34 +165,34 @@
 
 
 <!-- ═══ SLIDE 03 — AUTHN VS AUTHZ ═══ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#0f231c">
   <div class="slide-hdr"><span class="tag">02</span><h2>Authentication vs Authorisation — Where This Deck Sits</h2></div>
   <p>The OAuth/OIDC decks in this series cover <span class="a">authorisation</span> ("what may an app do on a user's behalf?") and <span class="a">identity assertions</span> ("a JWT saying this is Alice"). Neither tells you <em>how</em> the user proved they were Alice in the first place. <span class="g">That is this deck.</span></p>
 
   <svg class="diagram" viewBox="0 0 940 240" width="900" height="240">
-    <rect x="20"  y="80" width="180" height="80" rx="8" fill="#1a1a2a" stroke="#60a5fa" stroke-width="1.5"/>
-    <text x="110" y="115" text-anchor="middle" fill="#60a5fa" font-family="Playfair Display,serif" font-size="14" font-weight="700">User</text>
-    <text x="110" y="135" text-anchor="middle" fill="#ccc" font-family="JetBrains Mono,monospace" font-size="10">"is this really Alice?"</text>
+    <rect x="20"  y="80" width="180" height="80" rx="8" fill="#19342a" stroke="#93b6cd" stroke-width="1.5"/>
+    <text x="110" y="115" text-anchor="middle" fill="#93b6cd" font-family="Playfair Display,serif" font-size="14" font-weight="700">User</text>
+    <text x="110" y="135" text-anchor="middle" fill="#ccd5c7" font-family="JetBrains Mono,monospace" font-size="10">"is this really Alice?"</text>
 
-    <rect x="280" y="80" width="220" height="80" rx="8" fill="#1a1a2a" stroke="#f5a623" stroke-width="1.5"/>
-    <text x="390" y="105" text-anchor="middle" fill="#f5a623" font-family="Playfair Display,serif" font-size="14" font-weight="700">Authentication</text>
-    <text x="390" y="125" text-anchor="middle" fill="#ccc" font-family="JetBrains Mono,monospace" font-size="9">passwords · MFA · passkeys</text>
-    <text x="390" y="142" text-anchor="middle" fill="#ccc" font-family="JetBrains Mono,monospace" font-size="9">→ THIS DECK</text>
+    <rect x="280" y="80" width="220" height="80" rx="8" fill="#19342a" stroke="#cfad64" stroke-width="1.5"/>
+    <text x="390" y="105" text-anchor="middle" fill="#cfad64" font-family="Playfair Display,serif" font-size="14" font-weight="700">Authentication</text>
+    <text x="390" y="125" text-anchor="middle" fill="#ccd5c7" font-family="JetBrains Mono,monospace" font-size="9">passwords · MFA · passkeys</text>
+    <text x="390" y="142" text-anchor="middle" fill="#ccd5c7" font-family="JetBrains Mono,monospace" font-size="9">→ THIS DECK</text>
 
-    <rect x="540" y="80" width="200" height="80" rx="8" fill="#1a1a2a" stroke="#a78bfa" stroke-width="1.5"/>
-    <text x="640" y="105" text-anchor="middle" fill="#a78bfa" font-family="Playfair Display,serif" font-size="14" font-weight="700">Identity Tokens</text>
-    <text x="640" y="125" text-anchor="middle" fill="#ccc" font-family="JetBrains Mono,monospace" font-size="9">OIDC ID tokens, SAML</text>
-    <text x="640" y="142" text-anchor="middle" fill="#ccc" font-family="JetBrains Mono,monospace" font-size="9">→ OIDC / SAML decks</text>
+    <rect x="540" y="80" width="200" height="80" rx="8" fill="#19342a" stroke="#b2a3d0" stroke-width="1.5"/>
+    <text x="640" y="105" text-anchor="middle" fill="#b2a3d0" font-family="Playfair Display,serif" font-size="14" font-weight="700">Identity Tokens</text>
+    <text x="640" y="125" text-anchor="middle" fill="#ccd5c7" font-family="JetBrains Mono,monospace" font-size="9">OIDC ID tokens, SAML</text>
+    <text x="640" y="142" text-anchor="middle" fill="#ccd5c7" font-family="JetBrains Mono,monospace" font-size="9">→ OIDC / SAML decks</text>
 
-    <rect x="780" y="80" width="140" height="80" rx="8" fill="#1a1a2a" stroke="#4ecb8d" stroke-width="1.5"/>
-    <text x="850" y="115" text-anchor="middle" fill="#4ecb8d" font-family="Playfair Display,serif" font-size="14" font-weight="700">Authorisation</text>
-    <text x="850" y="135" text-anchor="middle" fill="#ccc" font-family="JetBrains Mono,monospace" font-size="9">OAuth · RBAC · ABAC</text>
+    <rect x="780" y="80" width="140" height="80" rx="8" fill="#19342a" stroke="#8fc9a1" stroke-width="1.5"/>
+    <text x="850" y="115" text-anchor="middle" fill="#8fc9a1" font-family="Playfair Display,serif" font-size="14" font-weight="700">Authorisation</text>
+    <text x="850" y="135" text-anchor="middle" fill="#ccd5c7" font-family="JetBrains Mono,monospace" font-size="9">OAuth · RBAC · ABAC</text>
 
-    <line x1="200" y1="120" x2="280" y2="120" stroke="#888"/>
-    <line x1="500" y1="120" x2="540" y2="120" stroke="#888"/>
-    <line x1="740" y1="120" x2="780" y2="120" stroke="#888"/>
+    <line x1="200" y1="120" x2="280" y2="120" stroke="#7c968b"/>
+    <line x1="500" y1="120" x2="540" y2="120" stroke="#7c968b"/>
+    <line x1="740" y1="120" x2="780" y2="120" stroke="#7c968b"/>
 
-    <text x="465" y="200" text-anchor="middle" fill="#888" font-family="DM Sans,sans-serif" font-size="11">"Sign in with Google" packages all three; in your own systems they are separate concerns with separate failure modes.</text>
+    <text x="465" y="200" text-anchor="middle" fill="#7c968b" font-family="DM Sans,sans-serif" font-size="11">"Sign in with Google" packages all three; in your own systems they are separate concerns with separate failure modes.</text>
   </svg>
 
   <div class="card amber" style="margin-top:0.4em;">
@@ -203,7 +203,7 @@
 
 
 <!-- ═══ SLIDE 04 — PASSWORD HASHING ═══ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#0f231c">
   <div class="slide-hdr"><span class="tag">03</span><h2>Password Hashing — The Only Acceptable Way to Store Passwords</h2></div>
   <p>If you ever store a password in plaintext, reverse-encrypted, or with a fast hash (MD5, SHA-256), you have lost. Use a <span class="a">memory-hard</span> password-hashing function with a per-user salt and tuned cost.</p>
 
@@ -260,7 +260,7 @@
 
 
 <!-- ═══ SLIDE 05 — PASSWORD POLICY ═══ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#0f231c">
   <div class="slide-hdr"><span class="tag">04</span><h2>Password Policy — What Actually Helps</h2></div>
   <p>Decades of "must contain a number, a symbol and the chief executive's mother's maiden name" gave us "<code>Password1!</code>". <span class="a">NIST SP 800-63B</span> (current) and <span class="a">BS 8484</span> agree on a much shorter list.</p>
 
@@ -304,7 +304,7 @@ if (list.split('\n').some(l =&gt; l.startsWith(suffix))) reject();</code></pre>
 
 
 <!-- ═══ SLIDE 06 — RATE LIMITING ═══ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#0f231c">
   <div class="slide-hdr"><span class="tag">05</span><h2>Rate-Limiting, Lockout &amp; Credential Stuffing</h2></div>
   <p>The single most consequential authentication API is <code>/login</code>. Every credential-stuffing campaign first finds it.</p>
 
@@ -351,7 +351,7 @@ if (list.split('\n').some(l =&gt; l.startsWith(suffix))) reject();</code></pre>
 
 
 <!-- ═══ SLIDE 07 — MFA FACTORS ═══ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#0f231c">
   <div class="slide-hdr"><span class="tag">06</span><h2>The Three Factor Classes</h2></div>
 
   <div class="cols cols-3">
@@ -401,7 +401,7 @@ if (list.split('\n').some(l =&gt; l.startsWith(suffix))) reject();</code></pre>
 
 
 <!-- ═══ SLIDE 08 — TOTP ═══ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#0f231c">
   <div class="slide-hdr"><span class="tag">07</span><h2>TOTP &amp; HOTP — How "Authenticator App" Codes Work</h2></div>
   <p><span class="a">HOTP</span> (RFC 4226, 2005): HMAC-based one-time password from a counter. <span class="a">TOTP</span> (RFC 6238, 2011): use the current Unix time / 30 s window as the counter. Both standards are open; the server and the app share a per-user secret only.</p>
 
@@ -451,7 +451,7 @@ if (list.split('\n').some(l =&gt; l.startsWith(suffix))) reject();</code></pre>
 
 
 <!-- ═══ SLIDE 09 — SMS / EMAIL ═══ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#0f231c">
   <div class="slide-hdr"><span class="tag">08</span><h2>SMS, Email &amp; Push — The Weakest "Strong" Factors</h2></div>
 
   <div class="cols cols-3">
@@ -498,7 +498,7 @@ if (list.split('\n').some(l =&gt; l.startsWith(suffix))) reject();</code></pre>
 
 
 <!-- ═══ SLIDE 10 — WEBAUTHN INTRO ═══ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#0f231c">
   <div class="slide-hdr"><span class="tag">09</span><h2>WebAuthn / FIDO2 / Passkeys — Three Names, One Thing</h2></div>
 
   <div class="cols cols-2">
@@ -553,7 +553,7 @@ signed = authenticator.get({
 
 
 <!-- ═══ SLIDE 11 — AUTHENTICATOR TYPES ═══ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#0f231c">
   <div class="slide-hdr"><span class="tag">10</span><h2>Authenticator Types — Platform vs Roaming, Synced vs Bound</h2></div>
 
   <table>
@@ -619,7 +619,7 @@ signed = authenticator.get({
 
 
 <!-- ═══ SLIDE 12 — DISCOVERABLE + CONDITIONAL UI ═══ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#0f231c">
   <div class="slide-hdr"><span class="tag">11</span><h2>Discoverable Credentials &amp; Conditional UI</h2></div>
   <p>The two features that make passkeys feel <em>better</em> than passwords, not just safer.</p>
 
@@ -668,7 +668,7 @@ navigator.credentials.get({
 
 
 <!-- ═══ SLIDE 13 — ATTESTATION / AAGUID ═══ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#0f231c">
   <div class="slide-hdr"><span class="tag">12</span><h2>Attestation, AAGUIDs &amp; the FIDO Metadata Service</h2></div>
   <p>For regulated deployments you need to know <em>what kind of authenticator</em> the user just enrolled — was it a YubiKey 5, a synced iCloud passkey, a software-only fake?</p>
 
@@ -717,7 +717,7 @@ navigator.credentials.get({
 
 
 <!-- ═══ SLIDE 14 — RECOVERY ═══ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#0f231c">
   <div class="slide-hdr"><span class="tag">13</span><h2>Account Recovery — The Unsolved Problem</h2></div>
   <p>The strongest authenticator in the world is undone by the recovery flow. <em>Whatever path the legitimate user takes when they lose access is the same path an attacker takes when they don't have any.</em></p>
 
@@ -756,7 +756,7 @@ navigator.credentials.get({
 
 
 <!-- ═══ SLIDE 15 — RISK / ADAPTIVE / CAEP ═══ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#0f231c">
   <div class="slide-hdr"><span class="tag">14</span><h2>Risk-Based / Adaptive Authentication &amp; CAEP</h2></div>
 
   <div class="cols cols-2">
@@ -803,7 +803,7 @@ navigator.credentials.get({
 
 
 <!-- ═══ SLIDE 16 — BOT / ABUSE ═══ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#0f231c">
   <div class="slide-hdr"><span class="tag">15</span><h2>Anti-Bot &amp; Abuse Detection</h2></div>
   <p>Authentication endpoints are also the primary surface for non-credential attacks: account creation abuse, scraping, low-and-slow stuffing.</p>
 
@@ -841,7 +841,7 @@ navigator.credentials.get({
 
 
 <!-- ═══ SLIDE 17 — CHOOSING A STACK ═══ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#0f231c">
   <div class="slide-hdr"><span class="tag">16</span><h2>Choosing a Stack — Build vs Buy</h2></div>
 
   <table>
@@ -888,7 +888,7 @@ navigator.credentials.get({
 
 
 <!-- ═══ SLIDE 18 — SUMMARY ═══ -->
-<section data-background-color="#0a0a0f">
+<section data-background-color="#0f231c">
   <div class="slide-hdr"><span class="tag">17</span><h2>Summary &amp; References</h2></div>
   <div class="cols cols-2">
     <div>
