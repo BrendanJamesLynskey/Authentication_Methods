@@ -6,7 +6,7 @@
 <title>Authentication Methods — Passwords, MFA, Passkeys &amp; WebAuthn</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus:wght@400&family=Hanken+Grotesk:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,700&family=Spline+Sans+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/black.min.css">
 <style>
@@ -14,20 +14,20 @@
           --bg:#0f231c; --bg2:#132a22; --bg3:#173028; --border:#29483d; --text:#ede8d8; --muted:#829b90; }
   .reveal-viewport { background: var(--bg); }
   .reveal .slides section { background: transparent; }
-  .reveal { font-family: 'DM Sans', sans-serif; color: var(--text); }
-  .reveal h1, .reveal h2, .reveal h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
+  .reveal { font-family: 'Hanken Grotesk', sans-serif; color: var(--text); }
+  .reveal h1, .reveal h2, .reveal h3 { font-family: 'Marcellus', serif; font-weight: 700; }
   .reveal h1 { font-size: 1.6em; color: var(--amber); line-height: 1.1; }
   .reveal h2 { font-size: 1.1em; color: var(--amber); margin-bottom: .2em; }
   .reveal h3 { font-size: .78em; color: var(--green); margin-bottom: .15em; }
   .reveal p  { font-size: .56em; line-height: 1.45; color: var(--text); }
   .reveal li { font-size: .54em; line-height: 1.45; margin-bottom: .1em; }
-  .reveal code { font-family: 'JetBrains Mono', monospace; font-size: .72em; }
+  .reveal code { font-family: 'Spline Sans Mono', monospace; font-size: .72em; }
   .reveal pre  { box-shadow: none; background: var(--bg3); border: 1px solid var(--border);
                  border-radius: 6px; padding: .3em .5em; margin: .25em 0; }
   .reveal pre code { font-size: .52em; line-height: 1.35; background: transparent; color: #d9dcce; }
   .slide-hdr { display:flex; align-items:center; gap:.4em; border-bottom:1px solid var(--border);
                padding-bottom:.2em; margin-bottom:.3em; }
-  .slide-hdr .tag { font-family:'JetBrains Mono',monospace; font-size:.42em; font-weight:500;
+  .slide-hdr .tag { font-family:'Spline Sans Mono',monospace; font-size:.42em; font-weight:500;
                     color:var(--bg); background:var(--amber); padding:.1em .4em; border-radius:3px;
                     letter-spacing:.04em; }
   .slide-hdr h2 { margin:0; font-size:.95em; }
@@ -53,9 +53,9 @@
   .reveal table tr:nth-child(even) td { background:#122820; }
   .a{color:var(--amber);font-weight:600;} .g{color:var(--green);font-weight:600;}
   .p{color:var(--purple);font-weight:600;} .b{color:var(--blue);font-weight:600;}
-  .r{color:var(--red);font-weight:600;} .mono{font-family:'JetBrains Mono',monospace;}
+  .r{color:var(--red);font-weight:600;} .mono{font-family:'Spline Sans Mono',monospace;}
   svg.diagram { display:block; margin:0 auto; overflow:visible; }
-  .pill { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:.44em;
+  .pill { display:inline-block; font-family:'Spline Sans Mono',monospace; font-size:.44em;
           padding:.08em .4em; border-radius:99px; border:1px solid; margin:0 .08em; }
   .pill.amber{color:var(--amber); border-color:var(--amber);}
   .pill.green{color:var(--green); border-color:var(--green);}
@@ -63,10 +63,10 @@
   .pill.blue{color:var(--blue); border-color:var(--blue);}
   .reveal .slide-footer{display:none;}
   .title-slide h1{font-size:1.8em;}
-  .title-slide .subtitle{font-size:.7em; color:var(--green); font-family:'DM Sans',sans-serif;
+  .title-slide .subtitle{font-size:.7em; color:var(--green); font-family:'Hanken Grotesk',sans-serif;
                          font-weight:300; letter-spacing:.04em; margin:.3em 0 .6em;}
-  .title-slide .meta{font-size:.48em; color:var(--muted); font-family:'JetBrains Mono',monospace;}
-  .ss-row{display:flex; gap:.25em; align-items:center; margin:.1em 0; font-size:.55em; font-family:'JetBrains Mono',monospace;}
+  .title-slide .meta{font-size:.48em; color:var(--muted); font-family:'Spline Sans Mono',monospace;}
+  .ss-row{display:flex; gap:.25em; align-items:center; margin:.1em 0; font-size:.55em; font-family:'Spline Sans Mono',monospace;}
   .ss-node{padding:.2em .55em; border-radius:5px; font-size:.9em; background:var(--bg3); border:1px solid var(--border); color:var(--text);}
   .ss-node.active{background:#2f3e35; border-color:var(--green); color:var(--green);}
   .ss-node.done{background:#19342a; border-color:var(--purple); color:var(--purple);}
@@ -74,6 +74,7 @@
   .reveal ul, .reveal ol { margin:.15em 0 .15em 1em; }
   .reveal .slides > section { display:flex !important; flex-direction:column !important; overflow-y:auto !important; align-items:stretch !important; justify-content:flex-start !important; }
 </style>
+<style>:root{font-synthesis-weight:none}</style>
 </head>
 <body>
 <div class="reveal">
@@ -83,7 +84,7 @@
 <!-- ═══ SLIDE 01 — TITLE ═══ -->
 <section class="title-slide" data-background-color="#0f231c">
   <div style="text-align:left; max-width:820px; margin:0 auto; padding:1em 0;">
-    <div style="font-family:'JetBrains Mono',monospace; font-size:.5em; color:var(--muted); margin-bottom:.4em; letter-spacing:.1em;">
+    <div style="font-family:'Spline Sans Mono',monospace; font-size:.5em; color:var(--muted); margin-bottom:.4em; letter-spacing:.1em;">
       TECHNICAL PRESENTATION
     </div>
     <h1>Authentication<br>Methods</h1>
@@ -171,28 +172,28 @@
 
   <svg class="diagram" viewBox="0 0 940 240" width="900" height="240">
     <rect x="20"  y="80" width="180" height="80" rx="8" fill="#19342a" stroke="#93b6cd" stroke-width="1.5"/>
-    <text x="110" y="115" text-anchor="middle" fill="#93b6cd" font-family="Playfair Display,serif" font-size="14" font-weight="700">User</text>
-    <text x="110" y="135" text-anchor="middle" fill="#ccd5c7" font-family="JetBrains Mono,monospace" font-size="10">"is this really Alice?"</text>
+    <text x="110" y="115" text-anchor="middle" fill="#93b6cd" font-family="Marcellus,serif" font-size="14" font-weight="700">User</text>
+    <text x="110" y="135" text-anchor="middle" fill="#ccd5c7" font-family="Spline Sans Mono,monospace" font-size="10">"is this really Alice?"</text>
 
     <rect x="280" y="80" width="220" height="80" rx="8" fill="#19342a" stroke="#cfad64" stroke-width="1.5"/>
-    <text x="390" y="105" text-anchor="middle" fill="#cfad64" font-family="Playfair Display,serif" font-size="14" font-weight="700">Authentication</text>
-    <text x="390" y="125" text-anchor="middle" fill="#ccd5c7" font-family="JetBrains Mono,monospace" font-size="9">passwords · MFA · passkeys</text>
-    <text x="390" y="142" text-anchor="middle" fill="#ccd5c7" font-family="JetBrains Mono,monospace" font-size="9">→ THIS DECK</text>
+    <text x="390" y="105" text-anchor="middle" fill="#cfad64" font-family="Marcellus,serif" font-size="14" font-weight="700">Authentication</text>
+    <text x="390" y="125" text-anchor="middle" fill="#ccd5c7" font-family="Spline Sans Mono,monospace" font-size="9">passwords · MFA · passkeys</text>
+    <text x="390" y="142" text-anchor="middle" fill="#ccd5c7" font-family="Spline Sans Mono,monospace" font-size="9">→ THIS DECK</text>
 
     <rect x="540" y="80" width="200" height="80" rx="8" fill="#19342a" stroke="#b2a3d0" stroke-width="1.5"/>
-    <text x="640" y="105" text-anchor="middle" fill="#b2a3d0" font-family="Playfair Display,serif" font-size="14" font-weight="700">Identity Tokens</text>
-    <text x="640" y="125" text-anchor="middle" fill="#ccd5c7" font-family="JetBrains Mono,monospace" font-size="9">OIDC ID tokens, SAML</text>
-    <text x="640" y="142" text-anchor="middle" fill="#ccd5c7" font-family="JetBrains Mono,monospace" font-size="9">→ OIDC / SAML decks</text>
+    <text x="640" y="105" text-anchor="middle" fill="#b2a3d0" font-family="Marcellus,serif" font-size="14" font-weight="700">Identity Tokens</text>
+    <text x="640" y="125" text-anchor="middle" fill="#ccd5c7" font-family="Spline Sans Mono,monospace" font-size="9">OIDC ID tokens, SAML</text>
+    <text x="640" y="142" text-anchor="middle" fill="#ccd5c7" font-family="Spline Sans Mono,monospace" font-size="9">→ OIDC / SAML decks</text>
 
     <rect x="780" y="80" width="140" height="80" rx="8" fill="#19342a" stroke="#8fc9a1" stroke-width="1.5"/>
-    <text x="850" y="115" text-anchor="middle" fill="#8fc9a1" font-family="Playfair Display,serif" font-size="14" font-weight="700">Authorisation</text>
-    <text x="850" y="135" text-anchor="middle" fill="#ccd5c7" font-family="JetBrains Mono,monospace" font-size="9">OAuth · RBAC · ABAC</text>
+    <text x="850" y="115" text-anchor="middle" fill="#8fc9a1" font-family="Marcellus,serif" font-size="14" font-weight="700">Authorisation</text>
+    <text x="850" y="135" text-anchor="middle" fill="#ccd5c7" font-family="Spline Sans Mono,monospace" font-size="9">OAuth · RBAC · ABAC</text>
 
     <line x1="200" y1="120" x2="280" y2="120" stroke="#7c968b"/>
     <line x1="500" y1="120" x2="540" y2="120" stroke="#7c968b"/>
     <line x1="740" y1="120" x2="780" y2="120" stroke="#7c968b"/>
 
-    <text x="465" y="200" text-anchor="middle" fill="#7c968b" font-family="DM Sans,sans-serif" font-size="11">"Sign in with Google" packages all three; in your own systems they are separate concerns with separate failure modes.</text>
+    <text x="465" y="200" text-anchor="middle" fill="#7c968b" font-family="Hanken Grotesk,sans-serif" font-size="11">"Sign in with Google" packages all three; in your own systems they are separate concerns with separate failure modes.</text>
   </svg>
 
   <div class="card amber" style="margin-top:0.4em;">
